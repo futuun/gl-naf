@@ -1,0 +1,10 @@
+# System and editor tools
+.vscode
+
+# Miscellaneous
+build
+babel_cache/
+jsconfig.json
+node_modules
+npm-debug.log
+yarn-error.log
