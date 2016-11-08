@@ -1,0 +1,46 @@
+runtime: go
+api_version: go1
+default_expiration: "3m"
+
+handlers:
+- url: /(.+\.js)$
+  static_files: \1
+  upload: (.+\.js)$
+  application_readable: false
+  mime_type: text/javascript
+
+- url: /robots.txt
+  static_files: robots.txt
+  upload: robots.txt
+  application_readable: true
+  mime_type: text/plain
+
+- url: /(.+\.png)$
+  static_files: \1
+  upload: (.+\.png)$
+  application_readable: false
+  mime_type: image/png
+
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+  application_readable: false
+  mime_type: image/x-icon
+
+- url: /browserconfig.xml
+  static_files: browserconfig.xml
+  upload: browserconfig.xml
+  application_readable: true
+  mime_type: application/xml
+
+- url: /manifest.json
+  static_files: manifest.json
+  upload: manifest.json
+  application_readable: false
+  mime_type: application/json
+
+- url: /
+  static_files: index.html
+  upload: index.html
+  application_readable: true
+  mime_type: text/html
