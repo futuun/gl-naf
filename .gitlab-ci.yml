@@ -1,0 +1,13 @@
+stages:
+  - deploy
+
+deploy-app:
+  image: golang:1.7
+  stage: deploy
+  script:
+    - source ./ci/appengine.sh
+    - source ./ci/yarn.sh
+    - source ./ci/deploy.sh
+  only:
+    - master
+    - develop
