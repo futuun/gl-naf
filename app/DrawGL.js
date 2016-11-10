@@ -19,17 +19,20 @@ export default class DrawGL {
     this.ctx.enable(this.ctx.DEPTH_TEST)
     this.ctx.depthFunc(this.ctx.LEQUAL)
     this.ctx.clear(this.ctx.COLOR_BUFFER_BIT | this.ctx.DEPTH_BUFFER_BIT)
-    this.vertexShader = this.compileShader(vertex, this.ctx.VERTEX_SHADER)
-    this.fragmentShader = this.compileShader(fragment, this.ctx.FRAGMENT_SHADER)
-    this.program = this.createProgram(this.vertexShader, this.fragmentShader)
+    this.program = this.createProgram(
+      this.compileShader(vertex, this.ctx.VERTEX_SHADER),
+      this.compileShader(fragment, this.ctx.FRAGMENT_SHADER),
+    )
+    this.ctx.useProgram(this.program)
     this.uniform = {}
 
     this.positionAttributeLocation = this.ctx.getAttribLocation(this.program, 'a_position')
-    this.buffer = this.ctx.createBuffer()
-    this.ctx.bindBuffer(this.ctx.ARRAY_BUFFER, this.buffer)
-    this.ctx.bufferData(this.ctx.ARRAY_BUFFER, new Float32Array([1, -3, -3, 1, 1, 1]), this.ctx.STATIC_DRAW)
+    this.ctx.bindAttribLocation(this.program, this.positionAttributeLocation , 'a_position')
+    this.squareVerticesBuffer = this.ctx.createBuffer()
+    this.ctx.bindBuffer(this.ctx.ARRAY_BUFFER, this.squareVerticesBuffer)
+    this.ctx.bufferData(this.ctx.ARRAY_BUFFER, new Int8Array([1, -3, -3, 1, 1, 1]), this.ctx.DYNAMIC_DRAW)
     this.ctx.enableVertexAttribArray(this.positionAttributeLocation)
-    this.ctx.vertexAttribPointer(this.positionAttributeLocation, 2, this.ctx.FLOAT, false, 0, 0)
+    this.ctx.vertexAttribPointer(this.positionAttributeLocation, 2, this.ctx.BYTE, false, 0, 0)
   }
 
   /**
@@ -89,18 +92,19 @@ export default class DrawGL {
   createProgram(vertex, fragment) {
     const program = this.ctx.createProgram()
 
-    // attach the shaders.
     this.ctx.attachShader(program, vertex)
     this.ctx.attachShader(program, fragment)
-
     this.ctx.linkProgram(program)
 
     const success = this.ctx.getProgramParameter(program, this.ctx.LINK_STATUS)
     if (!success) {
-      throw new Error('Program filed to link: ', this.ctx.getProgramInfoLog(program))
+      throw new Error('Program filed to link: ' + this.ctx.getProgramInfoLog(program))
     }
 
-    this.ctx.useProgram(program)
+    this.ctx.detachShader(program, fragment)
+    this.ctx.detachShader(program, vertex)
+    this.ctx.deleteShader(fragment)
+    this.ctx.deleteShader(vertex)
 
     return program
   }
@@ -162,6 +166,6 @@ export default class DrawGL {
    * @memberOf DrawGL
    */
   render() {
-    this.ctx.drawArrays(this.ctx.TRIANGLES, 0, 3);
+    this.ctx.drawArrays(this.ctx.TRIANGLES, 0, 3)
   }
 }
