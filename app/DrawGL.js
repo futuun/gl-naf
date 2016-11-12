@@ -26,6 +26,14 @@ export default class DrawGL {
     this.ctx.useProgram(this.program)
     this.uniform = {}
 
+    this.derivatives = this.ctx.getExtension('OES_standard_derivatives')
+    if (this.derivatives) {
+      this.ctx.hint(
+        this.derivatives.FRAGMENT_SHADER_DERIVATIVE_HINT_OES,
+        this.ctx.NICEST,
+      )
+    }
+
     this.positionAttributeLocation = this.ctx.getAttribLocation(this.program, 'a_position')
     this.ctx.bindAttribLocation(this.program, this.positionAttributeLocation , 'a_position')
     this.squareVerticesBuffer = this.ctx.createBuffer()
@@ -33,6 +41,7 @@ export default class DrawGL {
     this.ctx.bufferData(this.ctx.ARRAY_BUFFER, new Int8Array([1, -3, -3, 1, 1, 1]), this.ctx.DYNAMIC_DRAW)
     this.ctx.enableVertexAttribArray(this.positionAttributeLocation)
     this.ctx.vertexAttribPointer(this.positionAttributeLocation, 2, this.ctx.BYTE, false, 0, 0)
+    this.ctx.bindBuffer(this.ctx.ARRAY_BUFFER, null)
   }
 
   /**
@@ -50,6 +59,7 @@ export default class DrawGL {
       gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
     } catch(e) {
+      alert('Couldn\'t start WebGL. There\'s help for you at get.webgl.org/troubleshooting')
       throw new Error('Unable to initialize WebGL. Your browser may not support it.')
     }
 
@@ -75,7 +85,6 @@ export default class DrawGL {
     if (!success) {
       // something went wrong with the link
       throw new Error('Shader compile error: ' + this.ctx.getShaderInfoLog(shader))
-      // this.ctx.deleteShader(shader)
     }
 
     return shader
