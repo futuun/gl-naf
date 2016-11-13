@@ -59,7 +59,7 @@ export default class DrawGL {
       gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
     } catch(e) {
-      alert('Couldn\'t start WebGL. There\'s help for you at get.webgl.org/troubleshooting')
+      alert('Couldn\'t start WebGL. There\'s help for you at http://get.webgl.org/troubleshooting')
       throw new Error('Unable to initialize WebGL. Your browser may not support it.')
     }
 

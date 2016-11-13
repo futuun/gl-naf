@@ -34,7 +34,7 @@ const config = {
         exclude:[/node_modules/],
         loader: 'babel',
       }, {
-        test: /\.glsl$/,
+        test: /\.(glsl|svg)$/,
         exclude:[/node_modules/],
         loader: 'raw',
       },
@@ -44,7 +44,7 @@ const config = {
   plugins: [
     new CopyWebpackPlugin(staticAssets, {}),
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: false,
+      sourceMap: true,
       minimize: true,
       compress: {
         drop_debugger: true,
@@ -70,7 +70,7 @@ const config = {
     new webpack.optimize.AggressiveMergingPlugin(),
   ],
 
-  devtool: false,
+  devtool: '#source-map',
   profile: false,
   stats: {
     hash: true,

@@ -9,6 +9,12 @@ handlers:
   application_readable: false
   mime_type: text/javascript
 
+- url: /(.+\.js.map)$
+  static_files: \1
+  upload: (.+\.js.map)$
+  application_readable: false
+  mime_type: application/json
+
 - url: /robots.txt
   static_files: robots.txt
   upload: robots.txt
@@ -20,6 +26,12 @@ handlers:
   upload: (.+\.png)$
   application_readable: false
   mime_type: image/png
+
+- url: /(.+\.mp3)$
+  static_files: \1
+  upload: (.+\.mp3)$
+  application_readable: false
+  mime_type: audio/mpeg
 
 - url: /favicon.ico
   static_files: favicon.ico

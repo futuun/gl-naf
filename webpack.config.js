@@ -26,7 +26,7 @@ module.exports = {
         exclude:[/node_modules/],
         loader: 'babel',
       }, {
-        test: /\.glsl$/,
+        test: /\.(glsl|svg)$/,
         exclude:[/node_modules/],
         loader: 'raw',
       },
