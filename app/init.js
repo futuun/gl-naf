@@ -1,6 +1,8 @@
 import throttle from 'lodash/throttle'
 import AudioWrapper from './AudioWrapper'
 import attachButtons from './attachButtons'
+import remove from './svg/remove.svg'
+import add from './svg/add.svg'
 
 function drawSpectrum(array) {
   const iterations = Math.floor(array.length / 4)
@@ -102,7 +104,9 @@ export default function init(fractal) {
   const detail = document.getElementById('detail')
   detail.innerHTML = detailsLevel
   const detail_up = document.getElementById('detail_up')
+  detail_up.innerHTML = add
   const detail_down = document.getElementById('detail_down')
+  detail_down.innerHTML = remove
 
   detail_up.addEventListener('click', function(e) {
     e.preventDefault()
