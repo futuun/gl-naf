@@ -16,6 +16,7 @@ uniform vec2 offset; // of camera position
 uniform float zoom;
 uniform float brightness;
 uniform vec3 color;
+uniform int details;
 
 const float speed = 256.;
 
@@ -25,7 +26,10 @@ float field(in vec3 p) {
   float accum = 0.;
   float prev = 0.;
   float tw = 0.;
-  for (int i = 0; i < 24; ++i) {
+  for (int i = 0; i < 512; ++i) {
+    if (i > details) {
+      break;
+    }
     float mag = dot(p, p);
     p = abs(p) / mag + vec3(-.5, -.4, -1.5);
     float w = exp(-float(i) / 7.);

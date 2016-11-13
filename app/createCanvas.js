@@ -6,6 +6,8 @@
 export default function createCanvas () {
   const exist = document.getElementById('glcanvas')
   if (exist) {
+    exist.width = window.innerWidth
+    exist.height = window.innerHeight
     return exist
   }
 

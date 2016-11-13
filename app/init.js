@@ -6,7 +6,8 @@ export default function init(fractal) {
   let offsetX = 0
   let offsetY = 0
   let moveModyfier = .02
-  let zoom = 11
+  let zoom = 4
+  let detailsLevel = 24
 
   const xwidth = screen.width * window.devicePixelRatio
   const xheight = screen.height * window.devicePixelRatio
@@ -16,6 +17,7 @@ export default function init(fractal) {
   fractal.setUniform('time', '1f', [0])
   fractal.setUniform('zoom', '1f', [zoom])
   fractal.setUniform('brightness', '1f', [1])
+  fractal.setUniform('details', '1i', [detailsLevel])
   fractal.setUniform('color', '3f', [1, 0.5, 0.2])
 
   window.addEventListener('resize', throttle(function(e) {
@@ -72,6 +74,25 @@ export default function init(fractal) {
       }
     }, false)
   }
+
+  const detail = document.getElementById('detail')
+  detail.innerHTML = detailsLevel
+  const detail_up = document.getElementById('detail_up')
+  const detail_down = document.getElementById('detail_down')
+
+  detail_up.addEventListener('click', function(e) {
+    e.preventDefault()
+    console.log('up')
+    fractal.setUniform('details', '1i', [detailsLevel += 2])
+    detail.innerHTML = detailsLevel
+  }, false)
+
+  detail_down.addEventListener('click', function(e) {
+    e.preventDefault()
+    console.log('down')
+    fractal.setUniform('details', '1i', [detailsLevel -= 2])
+    detail.innerHTML = detailsLevel
+  }, false)
 
   function nextFrame(e) {
     fractal.render()
