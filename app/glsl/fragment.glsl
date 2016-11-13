@@ -14,7 +14,6 @@ uniform float time; // current time
 uniform vec2 viewportRes;
 uniform vec2 offset; // of camera position
 uniform float zoom;
-uniform float brightness;
 uniform vec3 color;
 uniform int details;
 
@@ -27,9 +26,7 @@ float field(in vec3 p) {
   float prev = 0.;
   float tw = 0.;
   for (int i = 0; i < 512; ++i) {
-    if (i > details) {
-      break;
-    }
+    if (i > details) break;
     float mag = dot(p, p);
     p = abs(p) / mag + vec3(-.5, -.4, -1.5);
     float w = exp(-float(i) / 7.);
@@ -46,6 +43,11 @@ void main() {
   vec3 p = vec3(uvs / zoom, 0.0) + vec3(1.0, -0.63, 0.0);
   p += .2 * vec3(offset.x, offset.y, sin(time / speed));
   float t = field(p);
-  gl_FragColor = mix(0.1, 1.0, brightness) *
-    vec4(color.r * t * t * t, color.g *t * t, color.b * t, 1.0);
+
+  gl_FragColor = vec4(
+    color.r * t * t * t,
+    color.g * t * t,
+    color.b * t,
+    1.8
+  );
 }

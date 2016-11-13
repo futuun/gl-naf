@@ -1,8 +1,30 @@
 import throttle from 'lodash/throttle'
+import AudioWrapper from './AudioWrapper'
+import attachButtons from './attachButtons'
+
+function drawSpectrum(array) {
+  const iterations = Math.floor(array.length / 4)
+  let r = 0
+  let g = 0
+  let b = 0
+
+  for (var i = 0; i < iterations; i++) {
+    r += array[i]
+    g += array[i + iterations]
+    b += array[i + iterations + iterations]
+  }
+
+  return [
+    r / iterations / 255,
+    g / iterations / 255,
+    b / iterations / 255,
+  ]
+}
 
 export default function init(fractal) {
   fractal.ctx.canvas.focus()
   const start = Date.now() / 1000
+  let color = [1, .5, .2]
   let offsetX = 0
   let offsetY = 0
   let moveModyfier = .02
@@ -16,9 +38,11 @@ export default function init(fractal) {
 
   fractal.setUniform('time', '1f', [0])
   fractal.setUniform('zoom', '1f', [zoom])
-  fractal.setUniform('brightness', '1f', [1])
   fractal.setUniform('details', '1i', [detailsLevel])
-  fractal.setUniform('color', '3f', [1, 0.5, 0.2])
+  fractal.setUniform('color', '3f', color)
+  let sound = new AudioWrapper('spazzmatica_polka.mp3', 32)
+  const frequencyBinCount = new Uint8Array(sound.analyser.frequencyBinCount)
+  attachButtons(sound)
 
   window.addEventListener('resize', throttle(function(e) {
     console.log('resize', e)
@@ -95,8 +119,14 @@ export default function init(fractal) {
   }, false)
 
   function nextFrame(e) {
-    fractal.render()
     fractal.setUniform('time', '1f', [Date.now() / 1000 - start])
+    if (sound.bufferSource) {
+      sound.analyser.getByteFrequencyData(frequencyBinCount)
+      color = drawSpectrum(frequencyBinCount)
+      fractal.setUniform('color', '3f', color)
+    }
+
+    fractal.render()
     window.requestAnimationFrame(nextFrame)
   }
   window.requestAnimationFrame(nextFrame)

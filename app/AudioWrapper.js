@@ -12,13 +12,11 @@ export default class AudioWrapper {
    *
    * @param {!string} url The link to audio file
    * @param {number} fftSize 
-   * @param {!func} audioProcessHandler The handler called onaudioprocess
    * @memberOf AudioWrapper
    */
-  constructor(url, fftSize = 256, audioProcessHandler) {
+  constructor(url, fftSize = 256) {
     this.pausedAt = 0
     this.audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-    this.audioProcessHandler = audioProcessHandler.bind(this)
 
     this.scriptProcessor = this.audioCtx.createScriptProcessor(4096, 1, 1)
     this.scriptProcessor.connect(this.audioCtx.destination)
@@ -76,8 +74,6 @@ export default class AudioWrapper {
     this.bufferSource.buffer = this.buffer
     this.bufferSource.start(0, begin)
     this.bufferSource.loop = true
-
-    this.scriptProcessor.onaudioprocess = this.audioProcessHandler
   }
 
   /**
@@ -90,6 +86,5 @@ export default class AudioWrapper {
     this.bufferSource.disconnect()
     this.bufferSource.stop()
     this.bufferSource = null
-    this.scriptProcessor.onaudioprocess = null
   }
 }
