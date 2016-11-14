@@ -6,8 +6,8 @@
 export default function createCanvas () {
   const exist = document.getElementById('glcanvas')
   if (exist) {
-    exist.width = window.innerWidth
-    exist.height = window.innerHeight
+    exist.width = window.innerWidth * window.devicePixelRatio
+    exist.height = window.innerHeight * window.devicePixelRatio
     return exist
   }
 
@@ -16,8 +16,8 @@ export default function createCanvas () {
   canvasEl.style.display = 'block'
   canvasEl.style.width = '100%'
   canvasEl.style.height = '100%'
-  canvasEl.width = window.innerWidth
-  canvasEl.height = window.innerHeight
+  canvasEl.width = window.innerWidth * window.devicePixelRatio
+  canvasEl.height = window.innerHeight * window.devicePixelRatio
 
   return document.body.appendChild(canvasEl)
 }

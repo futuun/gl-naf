@@ -48,8 +48,8 @@ export default function init(fractal) {
 
   window.addEventListener('resize', throttle(function(e) {
     console.log('resize', e)
-    const height = e.target.innerHeight
-    const width = e.target.innerWidth
+    const height = e.target.innerHeight * window.devicePixelRatio
+    const width = e.target.innerWidth * window.devicePixelRatio
 
     fractal.ctx.canvas.height = height
     fractal.ctx.canvas.width = width
