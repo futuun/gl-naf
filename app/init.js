@@ -1,30 +1,11 @@
 import throttle from 'lodash/throttle'
-import AudioWrapper from './AudioWrapper'
-import attachButtons from './attachButtons'
 import remove from './svg/remove.svg'
 import add from './svg/add.svg'
+import generateColor from './generateColor'
 
-function drawSpectrum(array) {
-  const iterations = Math.floor(array.length / 4)
-  let r = 0
-  let g = 0
-  let b = 0
-
-  for (var i = 0; i < iterations; i++) {
-    r += array[i]
-    g += array[i + iterations]
-    b += array[i + iterations + iterations]
-  }
-
-  return [
-    r / iterations / 255,
-    g / iterations / 255,
-    b / iterations / 255,
-  ]
-}
-
-export default function init(fractal) {
+export default function init(fractal, sound) {
   fractal.ctx.canvas.focus()
+  const frequencyBinCount = new Uint8Array(sound.analyser.frequencyBinCount)
   const start = Date.now() / 1000
   let color = [1, .5, .2]
   let offsetX = 0
@@ -42,9 +23,6 @@ export default function init(fractal) {
   fractal.setUniform('zoom', '1f', [zoom])
   fractal.setUniform('details', '1i', [detailsLevel])
   fractal.setUniform('color', '3f', color)
-  let sound = new AudioWrapper('spazzmatica_polka.mp3', 32)
-  const frequencyBinCount = new Uint8Array(sound.analyser.frequencyBinCount)
-  attachButtons(sound)
 
   window.addEventListener('resize', throttle(function(e) {
     console.log('resize', e)
@@ -73,11 +51,11 @@ export default function init(fractal) {
         break;
     }
 
-    offsetX = Math.max(0, offsetX)
-    offsetX = Math.min(6, offsetX)
+    // offsetX = Math.max(0, offsetX)
+    // offsetX = Math.min(6, offsetX)
 
-    offsetY = Math.max(-6, offsetY)
-    offsetY = Math.min(0, offsetY)
+    // offsetY = Math.max(-6, offsetY)
+    // offsetY = Math.min(0, offsetY)
     fractal.setUniform('offset', '2f', [offsetX, offsetY])
   }, false)
 
@@ -93,9 +71,9 @@ export default function init(fractal) {
   } else {
     fractal.ctx.canvas.addEventListener('mousewheel',function(e) {
       console.log('mousewheel', e)
-      if (e.deltaY < 0 && zoom + 1 < 100) {
+      if (e.deltaY < 0 && zoom + 1 < 200) {
         fractal.setUniform('zoom', '1f', [zoom += .5])
-      } else if (e.deltaY > 0 && zoom - 1 > 0) {
+      } else if (e.deltaY > 0 && zoom - 1 > -1) {
         fractal.setUniform('zoom', '1f', [zoom -= .5])
       }
     }, false)
@@ -126,7 +104,7 @@ export default function init(fractal) {
     fractal.setUniform('time', '1f', [Date.now() / 1000 - start])
     if (sound.bufferSource) {
       sound.analyser.getByteFrequencyData(frequencyBinCount)
-      color = drawSpectrum(frequencyBinCount)
+      color = generateColor(frequencyBinCount)
       fractal.setUniform('color', '3f', color)
     }
 
