@@ -38,9 +38,21 @@ export default class DrawGL {
     this.ctx.bindAttribLocation(this.program, this.positionAttributeLocation , 'a_position')
     this.squareVerticesBuffer = this.ctx.createBuffer()
     this.ctx.bindBuffer(this.ctx.ARRAY_BUFFER, this.squareVerticesBuffer)
-    this.ctx.bufferData(this.ctx.ARRAY_BUFFER, new Int8Array([1, -3, -3, 1, 1, 1]), this.ctx.DYNAMIC_DRAW)
+
+    this.vertexArrObj = this.ctx.getExtension('OES_vertex_array_object')
+    if (this.vertexArrObj) {
+      this.vao = this.vertexArrObj.createVertexArrayOES()
+      this.vertexArrObj.bindVertexArrayOES(this.vao)
+    }
+
+    const positions = [
+      1, -3,
+      -3, 1,
+      1, 1,
+    ]
+    this.ctx.bufferData(this.ctx.ARRAY_BUFFER, new Float32Array(positions), this.ctx.DYNAMIC_DRAW)
     this.ctx.enableVertexAttribArray(this.positionAttributeLocation)
-    this.ctx.vertexAttribPointer(this.positionAttributeLocation, 2, this.ctx.BYTE, false, 0, 0)
+    this.ctx.vertexAttribPointer(this.positionAttributeLocation, 2, this.ctx.FLOAT, false, 0, 0)
     this.ctx.bindBuffer(this.ctx.ARRAY_BUFFER, null)
   }
 

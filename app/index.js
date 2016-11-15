@@ -24,7 +24,9 @@ if (module.hot) {
 
   module.hot.accept('./AudioWrapper', () => {
     const nextAudioWrapper = require('./AudioWrapper').default
-    sound.pauseSound()
+    if (sound.bufferSource) {
+      sound.pauseSound()
+    }
     sound = new nextAudioWrapper(url, 32)
   })
 
