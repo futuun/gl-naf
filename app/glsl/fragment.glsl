@@ -17,7 +17,7 @@ uniform float zoom;
 uniform vec3 color;
 uniform int details;
 
-const float speed = 256.;
+const float speed = 128.;
 
 float field(in vec3 p) {
   float strength = 7. + .00003 * log(1.e-6 + fract(sin(time) * 4373.11));
@@ -29,8 +29,8 @@ float field(in vec3 p) {
     if (i > details) break;
     float mag = dot(p, p);
     p = abs(p) / mag + vec3(-.5, -.4, -1.5);
-    float w = exp(-float(i) / 7.);
-    accum += w * exp(-strength * pow(abs(mag - prev), 2.3));
+    float w = exp(-float(i) / 50.);
+    accum += w * exp(-strength * pow(abs(mag - prev), 2.));
     tw += w;
     prev = mag;
   }
@@ -45,9 +45,9 @@ void main() {
   float t = field(p);
 
   gl_FragColor = vec4(
-    color.r * t * t * t,
+    color.r * t * t,
     color.g * t * t,
     color.b * t,
-    1.8
+    1.
   );
 }
