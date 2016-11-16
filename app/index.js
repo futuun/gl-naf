@@ -6,7 +6,7 @@ import fragment from './glsl/fragment.glsl'
 import vertex from './glsl/vertex.glsl'
 import init from './init'
 
-const url = 'spazzmatica_polka.mp3'
+const url = 'bensound-epic.mp3'
 let fractal = new DrawGL(createCanvas(), vertex, fragment)
 let sound = new AudioWrapper(url, 32)
 attachButtons(sound)
