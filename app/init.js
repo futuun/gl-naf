@@ -1,6 +1,6 @@
+import { Manager, Pinch, Pan, Tap } from 'hammerjs'
 import throttle from 'lodash/throttle'
-import remove from './svg/remove.svg'
-import add from './svg/add.svg'
+import toggleFullScreen from './toggleFullScreen'
 import generateColor from './generateColor'
 
 export default function init(fractal, sound) {
@@ -11,7 +11,7 @@ export default function init(fractal, sound) {
   let offsetX = 0
   let offsetY = 0
   let moveModyfier = .02
-  let zoom = 4
+  let zoom = 6
   let detailsLevel = 24
 
   const xwidth = screen.width * window.devicePixelRatio
@@ -59,6 +59,42 @@ export default function init(fractal, sound) {
     fractal.setUniform('offset', '2f', [offsetX, offsetY])
   }, false)
 
+  const mc = new Manager(fractal.ctx.canvas)
+  const pinch = new Pinch()
+  const pan = new Pan()
+  const doubleTap = new Tap({ event: 'doubletap', taps: 2 })
+  pinch.recognizeWith(pan)
+  mc.add([pinch, pan, doubleTap])
+
+  let currentScale = null
+  let currentDeltaX = null
+  let currentDeltaY = null
+
+  // Handles pinch and pan events/transforming at the same time;
+  mc.on('pinch pan', function(ev) {
+    // Adjusting the current pinch/pan event properties using the
+    // previous ones set when they finished touching
+    currentScale = zoom * ev.scale
+    currentDeltaX = offsetX - (ev.deltaX / currentScale) / 100
+    currentDeltaY = offsetY + (ev.deltaY / currentScale) / 100
+
+    currentScale = Math.max(0.2, currentScale)
+    currentScale = Math.min(300, currentScale)
+    fractal.setUniform('zoom', '1f', [currentScale])
+    fractal.setUniform('offset', '2f', [currentDeltaX, currentDeltaY])
+  })
+
+  mc.on('doubletap', function(event) {
+    toggleFullScreen(fractal.ctx.canvas)
+  })
+
+  mc.on('panend pinchend', function(ev) {
+    // Saving the final transforms for adjustment next time the user interacts.
+    zoom = currentScale
+    offsetX = currentDeltaX
+    offsetY = currentDeltaY
+  })
+
   if ('onwheel' in window) {
     fractal.ctx.canvas.addEventListener('wheel', function(e) {
       console.log('wheel', e)
@@ -82,9 +118,7 @@ export default function init(fractal, sound) {
   const detail = document.getElementById('detail')
   detail.innerHTML = detailsLevel
   const detail_up = document.getElementById('detail_up')
-  detail_up.innerHTML = add
   const detail_down = document.getElementById('detail_down')
-  detail_down.innerHTML = remove
 
   detail_up.addEventListener('click', function(e) {
     e.preventDefault()
