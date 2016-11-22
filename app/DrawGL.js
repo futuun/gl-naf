@@ -17,7 +17,7 @@ export default class DrawGL {
    */
   constructor(canvas, vertex, fragment) {
     this.ctx = this.getWebGLRenderingContext(canvas)
-    window.addEventListener('resize', throttle(this.onResize, 100))
+    window.addEventListener('resize', throttle(this.onResize.bind(this), 100))
     this.ctx.clearColor(0.0, 0.0, 0.0, 1.0)
     this.ctx.enable(this.ctx.DEPTH_TEST)
     this.ctx.depthFunc(this.ctx.LEQUAL)
