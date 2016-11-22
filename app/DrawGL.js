@@ -1,3 +1,5 @@
+import throttle from 'lodash/throttle'
+
 /**
  * Small wrapper for simplifying frequent things
  *
@@ -15,6 +17,7 @@ export default class DrawGL {
    */
   constructor(canvas, vertex, fragment) {
     this.ctx = this.getWebGLRenderingContext(canvas)
+    window.addEventListener('resize', throttle(this.onResize, 100))
     this.ctx.clearColor(0.0, 0.0, 0.0, 1.0)
     this.ctx.enable(this.ctx.DEPTH_TEST)
     this.ctx.depthFunc(this.ctx.LEQUAL)
@@ -53,7 +56,6 @@ export default class DrawGL {
     this.ctx.bufferData(this.ctx.ARRAY_BUFFER, new Float32Array(positions), this.ctx.DYNAMIC_DRAW)
     this.ctx.enableVertexAttribArray(this.positionAttributeLocation)
     this.ctx.vertexAttribPointer(this.positionAttributeLocation, 2, this.ctx.FLOAT, false, 0, 0)
-    this.ctx.bindBuffer(this.ctx.ARRAY_BUFFER, null)
   }
 
   /**
@@ -131,9 +133,24 @@ export default class DrawGL {
   }
 
   /**
+   * Handle resizing of render context
+   *
+   * @param {event} e The event object
+   * @memberOf DrawGL
+   */
+  onResize(e) {
+    const height = e.target.innerHeight * window.devicePixelRatio
+    const width = e.target.innerWidth * window.devicePixelRatio
+
+    this.ctx.canvas.height = height
+    this.ctx.canvas.width = width
+    this.ctx.viewport(0, 0, width, height)
+  }
+
+  /**
    * Sets the value of given uniform
    *
-   * @param {!string} name
+   * @param {!string} name The name of the uniform
    * @param {!string} type
    * @param {!Array<number>} value
    * @memberOf DrawGL
@@ -165,7 +182,7 @@ export default class DrawGL {
   /**
    * Returns width of current canvas
    *
-   * @returns {number} width
+   * @returns {number} width of render context
    * @memberOf DrawGL
    */
   getWidth() {
@@ -175,7 +192,7 @@ export default class DrawGL {
   /**
    * Returns height of current canvas
    *
-   * @returns {number} height
+   * @returns {number} height of render context
    * @memberOf DrawGL
    */
   getHeight() {
