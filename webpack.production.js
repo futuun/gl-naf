@@ -58,7 +58,7 @@ const config = {
       template: `${APP}/index.html`,
       minify: {
         collapseWhitespace: true,
-        preserveLineBreaks: true,
+        minifyCSS: true,
       },
     }),
     new webpack.DefinePlugin({

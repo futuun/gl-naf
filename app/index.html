@@ -30,32 +30,75 @@
     align-items: center;
     position: absolute;
     font-family: monospace;
-    font-size: 1.2em;
     top: 0;
     left: 0;
-    opacity: .6;
     color: #fff;
   }
   #player {
     position: absolute;
     top: 0;
     right: 0;
-    opacity: .6;
   }
   #glcanvas {
     display: block;
     width: 100%;
     height: 100%;
   }
+  .contact {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+  }
+  .icon {
+    opacity: .6;
+    padding: 4px;
+    transform: scale(.8);
+    transition: ease-in 100ms transform, ease-in 50ms opacity;
+  }
+  .icon:hover {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  .icon:active {
+    transform: scale(1);
+  }
+  .music {
+    color: #fff;
+    opacity: .5;
+    position: absolute;
+    font-family: monospace;
+    bottom: 0;
+    right: 0;
+    text-decoration: none;
+  }
   </style>
 </head>
-<body style="margin: 0; padding: 0; border: 0; width: 100%; height: 100%;">
+<body style="margin: 0; padding: 0; border: 0; width: 100%; height: 100%; overflow: hidden; background-color: #000;">
   <canvas id="glcanvas"></canvas>
   <div id="controls">
-    <div id="detail_up"></div>
+    <div id="detail_up" class="icon">
+      <%= require('./svg/add.svg') %>
+    </div>
     <div id="detail">24</div>
-    <div id="detail_down"></div>
+    <div id="detail_down" class="icon">
+      <%= require('./svg/remove.svg') %>
+    </div>
   </div>
-  <div id="player"></div>
+  <a href="http://www.bensound.com/royalty-free-music" class="music">Music: Epic by Bensound.com</a>
+  <div id="player" class="icon"></div>
+  <div class="contact">
+    <a class="icon" target="_top" href="mailto:hello@naf.gl">
+      <%= require('./svg/paper-plane.svg') %>
+    </a>
+    <a class="icon" target="_blank" href="https://github.com/futuun">
+      <%= require('./svg/github.svg') %>
+    </a>
+    <a class="icon" target="_blank" href="https://www.linkedin.com/in/futuun">
+      <%= require('./svg/linkedin.svg') %>
+    </a>
+  </div>
 </body>
 </html>
