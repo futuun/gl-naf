@@ -19,6 +19,7 @@ export default function init(fractal, sound) {
 
   fractal.setUniform('time', '1f', [0])
   fractal.setUniform('zoom', '1f', [zoom])
+  fractal.setUniform('speed', '1f', [128])
   fractal.setUniform('details', '1i', [detailsLevel])
   fractal.setUniform('color', '3f', color)
 
@@ -75,25 +76,6 @@ export default function init(fractal, sound) {
       }
     }, false)
   }
-
-  const detail = document.getElementById('detail')
-  detail.innerHTML = detailsLevel
-  const detail_up = document.getElementById('detail_up')
-  const detail_down = document.getElementById('detail_down')
-
-  detail_up.addEventListener('click', function(e) {
-    e.preventDefault()
-    console.log('up')
-    fractal.setUniform('details', '1i', [detailsLevel += 2])
-    detail.innerHTML = detailsLevel
-  }, false)
-
-  detail_down.addEventListener('click', function(e) {
-    e.preventDefault()
-    console.log('down')
-    fractal.setUniform('details', '1i', [detailsLevel -= 2])
-    detail.innerHTML = detailsLevel
-  }, false)
 
   function nextFrame(e) {
     fractal.setUniform('time', '1f', [Date.now() / 1000 - start])

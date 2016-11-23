@@ -25,15 +25,6 @@
   <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
   <meta name="theme-color" content="#000000">
   <style>
-  #controls {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    font-family: monospace;
-    top: 0;
-    left: 0;
-    color: #fff;
-  }
   #player {
     position: absolute;
     top: 0;
@@ -78,15 +69,6 @@
 </head>
 <body style="margin: 0; padding: 0; border: 0; width: 100%; height: 100%; overflow: hidden; background-color: #000;">
   <canvas id="glcanvas"></canvas>
-  <div id="controls">
-    <div id="detail_up" class="icon">
-      <%= require('./svg/add.svg') %>
-    </div>
-    <div id="detail">24</div>
-    <div id="detail_down" class="icon">
-      <%= require('./svg/remove.svg') %>
-    </div>
-  </div>
   <a href="http://www.bensound.com/royalty-free-music" class="music">Music: Epic by Bensound.com</a>
   <div id="player" class="icon"></div>
   <div class="contact">

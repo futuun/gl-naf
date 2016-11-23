@@ -10,14 +10,12 @@
   precision mediump float;
 #endif
 
-uniform float time; // current time
+uniform float time;
 uniform vec2 viewportRes;
-uniform vec2 offset; // of camera position
+uniform vec2 offset;
 uniform float zoom;
 uniform vec3 color;
-uniform int details;
-
-const float speed = 128.;
+uniform float speed;
 
 float field(in vec3 p) {
   float strength = 7. + .00003 * log(1.e-6 + fract(sin(time) * 4373.11));
@@ -25,8 +23,7 @@ float field(in vec3 p) {
   float accum = 0.;
   float prev = 0.;
   float tw = 0.;
-  for (int i = 0; i < 512; ++i) {
-    if (i > details) break;
+  for (int i = 0; i < 25; ++i) {
     float mag = dot(p, p);
     p = abs(p) / mag + vec3(-.5, -.4, -1.5);
     float w = exp(-float(i) / 50.);

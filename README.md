@@ -2,8 +2,5 @@
 
 naf.gl website
 
-
-TODO: add credits for:
-
 "Simplicity" by JoshP
-"Spazzmatica Polka" by Kevin MacLeod (incompetech.com)
+"Epic" by Bensound.com

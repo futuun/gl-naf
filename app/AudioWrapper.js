@@ -11,7 +11,7 @@ export default class AudioWrapper {
    * Creates an instance of AudioWrapper.
    *
    * @param {!string} url The link to audio file
-   * @param {number} fftSize 
+   * @param {number} fftSize
    * @memberOf AudioWrapper
    */
   constructor(url, fftSize = 256) {
@@ -26,7 +26,8 @@ export default class AudioWrapper {
     this.analyser.fftSize = fftSize
     this.analyser.connect(this.scriptProcessor)
 
-    this.loadSound(url)
+    this.url = url
+    // this.loadSound(url)
   }
 
   /**
@@ -38,7 +39,10 @@ export default class AudioWrapper {
   loadSound(url) {
     xhr('GET', url, null, { responseType: 'arraybuffer' })
       .then(res => this.audioCtx.decodeAudioData(res))
-      .then(buffer => { this.buffer = buffer })
+      .then(buffer => {
+        this.buffer = buffer
+        this.toggleSound()
+      })
       .catch(error => console.error(error))
   }
 
@@ -57,6 +61,9 @@ export default class AudioWrapper {
       }
 
       this.pauseSound()
+    } else {
+      this.loadSound(this.url)
+      return true
     }
     return false
   }
